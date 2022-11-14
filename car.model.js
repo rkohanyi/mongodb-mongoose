@@ -1,12 +1,11 @@
 const mongoose = require('mongoose')
-
-const Owner = new mongoose.Schema({
-    name: String
-})
+const { OwnerSchema } = require('./owner.model')
 
 module.exports = mongoose.model('cars', new mongoose.Schema({
     model: String,
     licensePlate: String,
     age: Number,
-    owner: [Owner]
+    doors: Number,
+    color: String,
+    owners: [OwnerSchema]
 }))
