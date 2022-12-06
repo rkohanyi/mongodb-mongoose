@@ -1,10 +1,11 @@
 const mongoose = require('mongoose')
 
-const Owner = new mongoose.Schema({
-    name: String
+const OwnerSchema = new mongoose.Schema({
+    name: String,
+    age: Number,
 })
 
 module.exports = {
-    Owner: mongoose.model('owners', Owner),
-    OwnerSchema: Owner,
+    Owner: mongoose.model('owners', OwnerSchema),
+    OwnerSchema: OwnerSchema,
 }

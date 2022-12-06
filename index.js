@@ -3,6 +3,12 @@ const mongoose = require('mongoose')
 const Car = require('./car.model.js')
 const { Owner } = require('./owner.model.js')
 
+const colors = [
+    'blue',
+    'red',
+    'green'
+]
+
 const app = express()
 app.use(express.json())
 const PORT = 3000
@@ -11,6 +17,10 @@ const PORT = 3000
 app.get('/cars', async (req, res) => {
     const cars = await Car.find()
     res.json(cars)
+})
+
+app.get('/owners', async (req, res) => {
+    res.json(await Owner.find())
 })
 
 // READ
@@ -28,21 +38,23 @@ app.get('/cars/:id', async (req, res) => {
 // CREATE
 app.post('/cars', async (req, res) => {
     try {
-        const car = new Car(req.body)
-        console.log('car1', car)
-        await car.save()
-        console.log('car2', car)
+        const car = await Car.create(req.body)
         res.json(car)
     } catch (err) {
         res.status(500).json(err)
     }
 })
 
-const colors = [
-    'blue',
-    'red',
-    'green'
-]
+// CREATE
+app.post('/cars2', async (req, res) => {
+    try {
+        const car = new Car(req.body)
+        await car.save()
+        res.json(car)
+    } catch (err) {
+        res.status(500).json(err)
+    }
+})
 
 // UPDATE
 app.put('/cars/random-color', async (req, res) => {
@@ -55,6 +67,7 @@ app.put('/cars/random-color', async (req, res) => {
     res.send()
 })
 
+// UPDATE
 app.put('/cars/:carId/owner/:ownerId', async (req, res) => {
     try {
         const owner = await Owner.findOne({ _id: req.params.ownerId })
@@ -65,6 +78,7 @@ app.put('/cars/:carId/owner/:ownerId', async (req, res) => {
     }
 })
 
+// UPDATE
 app.put('/cars/:id', async (req, res) => {
     console.log(':id', req.params.id)
     try {
@@ -75,6 +89,7 @@ app.put('/cars/:id', async (req, res) => {
     }
 })
 
+// UPDATE
 app.put('/cars/:id/doors', async (req, res) => {
     try {
         await Car.updateOne({ _id: req.params.id }, { $set: { doors: req.body.doors } })
@@ -84,6 +99,7 @@ app.put('/cars/:id/doors', async (req, res) => {
     }
 })
 
+// UPDATE
 app.put('/cars/:id/doors2', async (req, res) => {
     try {
         const car = await Car.findOne({ _id: req.params.id })
@@ -105,6 +121,7 @@ app.delete('/cars', async (req, res) => {
     }
 })
 
+// DELETE
 app.delete('/cars/:id', async (req, res) => {
     try {
         await Car.deleteOne({ _id: req.params.id })
